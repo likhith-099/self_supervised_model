@@ -47,7 +47,8 @@ class SatelliteTileDataset(Dataset):
         if augment:
             self.transform = A.Compose([
                 A.RandomRotate90(p=0.5),
-                A.Flip(p=0.5),
+                A.HorizontalFlip(p=0.5),
+                A.VerticalFlip(p=0.3),
                 A.ShiftScaleRotate(shift_limit=0.1, scale_limit=0.1, rotate_limit=30, p=0.5),
                 A.ColorJitter(brightness=0.2, contrast=0.2, saturation=0.2, hue=0.1, p=0.5),
                 A.Resize(img_size, img_size),

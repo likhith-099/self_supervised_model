@@ -1,0 +1,37 @@
+================================================================================
+FUTURE PREDICTION SUMMARY
+================================================================================
+
+Location: Kumta, Karnataka, India
+Condition: VEGETATION
+Historical Period: 2023 - 2026
+Prediction Period: 2027 - 2036
+
+TREND ANALYSIS
+--------------------------------------------------------------------------------
+Overall Direction: DECREASING
+Predicted Change: 61013.98%
+Confidence Level: 95%
+
+HISTORICAL DATA
+--------------------------------------------------------------------------------
+Year 2023: Mean=-0.0002, Magnitude=0.0892
+Year 2024: Mean=0.0490, Magnitude=0.1112
+Year 2025: Mean=0.1201, Magnitude=0.1610
+Year 2026: Mean=0.1801, Magnitude=0.1930
+
+PREDICTED VALUES
+--------------------------------------------------------------------------------
+Year 2027: Predicted Mean=0.2537
+Year 2028: Predicted Mean=0.3310
+Year 2029: Predicted Mean=0.4137
+Year 2030: Predicted Mean=0.5018
+Year 2031: Predicted Mean=0.5952
+Year 2032: Predicted Mean=0.6940
+Year 2033: Predicted Mean=0.7982
+Year 2034: Predicted Mean=0.9077
+Year 2035: Predicted Mean=1.0226
+Year 2036: Predicted Mean=1.1428
+
+INTERPRETATION
+--------------------------------------------------------------------------------

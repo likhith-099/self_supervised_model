@@ -4,6 +4,7 @@ Uses Nominatim (OpenStreetMap) API for geocoding
 """
 
 import requests
+import numpy as np
 from typing import Tuple, Optional, Dict
 
 
@@ -120,6 +121,17 @@ class Geocoder:
                 'query': 'Mangalore, Karnataka, India',
                 'bbox': [74.8, 12.8, 75.1, 13.0],
                 'description': 'Mangalore, Karnataka, India'
+            },
+            'kumta': {
+                'query': 'Kumta, Karnataka, India',
+                'bbox': [74.35, 14.35, 74.55, 14.55],
+                'description': 'Kumta, Karnataka, India'
+            },
+            'jammu_kashmir': {
+                'query': 'Jammu and Kashmir, India',
+                'bbox': [73.5, 32.3, 80.3, 36.9],  # Full J&K region
+                'description': 'Jammu & Kashmir, India',
+                'use_large_bbox': True  # Flag to use the full region bbox
             },
             'amazon': {
                 'query': 'Amazon Rainforest, Brazil',

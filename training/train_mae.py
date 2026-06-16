@@ -14,6 +14,7 @@ import torch
 import torch.nn as nn
 import torch.optim as optim
 from torch.utils.tensorboard import SummaryWriter
+from torch.cuda.amp import autocast, GradScaler
 
 # Add parent directory to path
 sys.path.insert(0, str(Path(__file__).parent.parent))
@@ -62,6 +63,9 @@ class MAETrainer:
         
         # Loss function - reconstruction loss (MSE)
         self.criterion = nn.MSELoss()
+        
+        # Mixed precision scaler
+        self.scaler = GradScaler()
         
         # Optimizer with AdamW
         self.optimizer = optim.AdamW(
@@ -132,6 +136,10 @@ class MAETrainer:
             self.best_val_loss = checkpoint['best_val_loss']
             print(f"✓ Loaded best validation loss: {self.best_val_loss:.4f}")
         
+        # Load batch index if available (for mid-epoch resume)
+        if 'batch_idx' in checkpoint and checkpoint['batch_idx'] is not None:
+            print(f"✓ Mid-epoch checkpoint: Epoch {checkpoint['epoch']}, Batch {checkpoint['batch_idx']}")
+        
         # Set start epoch
         self.start_epoch = len(self.history['train_loss'])
         print(f"\n📊 Training will resume from epoch {self.start_epoch + 1}")
@@ -142,6 +150,7 @@ class MAETrainer:
         self.model.train()
         total_loss = 0.0
         n_batches = 0
+        epoch_start_time = time.time()
         
         for batch_idx, (images, _) in enumerate(self.train_loader):
             # Debug: Check tensor dimensions
@@ -152,31 +161,35 @@ class MAETrainer:
             
             images = images.to(self.device)
             
-            # Forward pass
-            reconstructions, mask = self.model(images)
-            
-            # Compute loss
-            # Convert target images to patch format to match reconstruction
-            B, C, H, W = images.shape
-            patch_size = self.model.encoder.patch_embed.patch_size
-            
-            # Reshape target to patches: (B, C, H, W) -> (B, N_patches, patch_size*patch_size*C)
-            target = images.reshape(B, C, H // patch_size, patch_size, W // patch_size, patch_size)
-            target = target.permute(0, 2, 4, 3, 5, 1)  # (B, n_h, n_w, ps, ps, C)
-            target = target.reshape(B, -1, patch_size * patch_size * C)
-            target = target.to(self.device)
-            
-            # Only compute loss on masked patches
-            loss = self.criterion(reconstructions, target)
-            
-            # Backward pass
+            # Forward pass with mixed precision
             self.optimizer.zero_grad()
-            loss.backward()
+            
+            with autocast():
+                reconstructions, mask = self.model(images)
+                
+                # Compute loss
+                # Convert target images to patch format to match reconstruction
+                B, C, H, W = images.shape
+                patch_size = self.model.encoder.patch_embed.patch_size
+                
+                # Reshape target to patches: (B, C, H, W) -> (B, N_patches, patch_size*patch_size*C)
+                target = images.reshape(B, C, H // patch_size, patch_size, W // patch_size, patch_size)
+                target = target.permute(0, 2, 4, 3, 5, 1)  # (B, n_h, n_w, ps, ps, C)
+                target = target.reshape(B, -1, patch_size * patch_size * C)
+                target = target.to(self.device)
+                
+                # Only compute loss on masked patches
+                loss = self.criterion(reconstructions, target)
+            
+            # Backward pass with gradient scaling
+            self.scaler.scale(loss).backward()
             
             # Gradient clipping
+            self.scaler.unscale_(self.optimizer)
             torch.nn.utils.clip_grad_norm_(self.model.parameters(), max_norm=1.0)
             
-            self.optimizer.step()
+            self.scaler.step(self.optimizer)
+            self.scaler.update()
             
             total_loss += loss.item()
             n_batches += 1
@@ -185,10 +198,17 @@ class MAETrainer:
             log_interval = 1 if epoch == 0 else 50
             if batch_idx % log_interval == 0:
                 avg_loss = total_loss / n_batches
+                batch_time = time.time() - epoch_start_time
                 print(f"Epoch {epoch} [{batch_idx}/{len(self.train_loader)}] "
-                      f"Loss: {avg_loss:.4f}")
+                      f"Loss: {avg_loss:.4f} | Time: {batch_time:.1f}s")
+            
+            # Save mid-epoch checkpoint every 500 batches for safety
+            if batch_idx > 0 and batch_idx % 500 == 0:
+                self.save_checkpoint(epoch, f'checkpoint_epoch{epoch}_batch{batch_idx}.pth', batch_idx)
         
         avg_train_loss = total_loss / n_batches
+        epoch_total_time = time.time() - epoch_start_time
+        print(f"Epoch {epoch} completed in {epoch_total_time:.1f}s")
         return avg_train_loss
     
     @torch.no_grad()
@@ -234,12 +254,13 @@ class MAETrainer:
             for param_group in self.optimizer.param_groups:
                 param_group['lr'] = warmup_factor * self.scheduler.get_last_lr()[0]
     
-    def save_checkpoint(self, epoch: int, filename: str = 'checkpoint.pth'):
+    def save_checkpoint(self, epoch: int, filename: str = 'checkpoint.pth', batch_idx: int = None):
         """Save model checkpoint"""
         checkpoint_path = self.checkpoint_dir / filename
         
         state = {
             'epoch': epoch,
+            'batch_idx': batch_idx,
             'model_state_dict': self.model.state_dict(),
             'optimizer_state_dict': self.optimizer.state_dict(),
             'scheduler_state_dict': self.scheduler.state_dict(),
@@ -249,7 +270,10 @@ class MAETrainer:
         }
         
         torch.save(state, checkpoint_path)
-        print(f"Saved checkpoint: {checkpoint_path}")
+        if batch_idx is not None:
+            print(f"\n💾 Saved mid-epoch checkpoint: {checkpoint_path} (Epoch {epoch}, Batch {batch_idx})")
+        else:
+            print(f"Saved checkpoint: {checkpoint_path}")
     
     def train(self) -> dict:
         """Full training loop"""
@@ -257,7 +281,10 @@ class MAETrainer:
         print(f"Training samples: {len(self.train_loader.dataset)}")
         print(f"Validation samples: {len(self.val_loader.dataset)}")
         print(f"Max epochs: {self.max_epochs}")
+        print(f"Mixed precision: {'Enabled' if self.device == 'cuda' else 'Disabled'}")
         print("-" * 60)
+        
+        training_start_time = time.time()
         
         for epoch in range(self.start_epoch, self.max_epochs):
             start_time = time.time()
@@ -299,11 +326,13 @@ class MAETrainer:
             
             # Print epoch summary
             epoch_time = time.time() - start_time
+            total_elapsed = time.time() - training_start_time
             print(f"Epoch {epoch:3d} | "
                   f"Train Loss: {train_loss:.4f} | "
                   f"Val Loss: {val_loss:.4f} | "
                   f"LR: {current_lr:.2e} | "
-                  f"Time: {epoch_time:.1f}s")
+                  f"Epoch Time: {epoch_time:.1f}s | "
+                  f"Total Time: {total_elapsed:.1f}s")
             print("-" * 60)
             
             # Early stopping check (optional)
@@ -314,8 +343,11 @@ class MAETrainer:
         # Save final checkpoint
         self.save_checkpoint(self.max_epochs - 1, 'checkpoint_final.pth')
         
-        print("\nTraining completed!")
+        total_training_time = time.time() - training_start_time
+        hours = total_training_time / 3600
+        print(f"\nTraining completed!")
         print(f"Best validation loss: {self.best_val_loss:.4f}")
+        print(f"Total training time: {total_training_time:.1f}s ({hours:.2f} hours)")
         
         return self.history
 

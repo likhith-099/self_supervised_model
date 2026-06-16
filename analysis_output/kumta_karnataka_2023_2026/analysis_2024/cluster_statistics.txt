@@ -1,0 +1,28 @@
+Cluster Statistics
+==================================================
+
+Cluster 0:
+  Samples: 50 (6.2%)
+  Mean feature norm: 3.8483
+  Std feature norm: 0.0834
+
+Cluster 1:
+  Samples: 250 (31.2%)
+  Mean feature norm: 3.8499
+  Std feature norm: 0.1078
+
+Cluster 2:
+  Samples: 250 (31.2%)
+  Mean feature norm: 3.8568
+  Std feature norm: 0.1031
+
+Cluster 3:
+  Samples: 200 (25.0%)
+  Mean feature norm: 3.8539
+  Std feature norm: 0.0987
+
+Cluster 4:
+  Samples: 50 (6.2%)
+  Mean feature norm: 3.8485
+  Std feature norm: 0.0893
+

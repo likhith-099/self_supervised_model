@@ -1,0 +1,42 @@
+================================================================================
+WATER BODY EXPANSION ANALYSIS: JAMMU & KASHMIR
+================================================================================
+
+📍 LOCATION DETAILS
+--------------------------------------------------------------------------------
+Region: Jammu and Kashmir, India
+Center Coordinates: 33.6649, 75.163
+Bounding Box: [73.5, 32.3, 80.3, 36.9]
+Geography: Himalayan region, valleys, lakes, glaciers
+Major Water Bodies:
+  - Dal Lake (Srinagar)
+  - Wular Lake (largest freshwater lake in India)
+  - Jhelum River
+  - Chenab River
+  - Multiple glaciers and streams
+Analysis Period: 2025 - 2026
+Data Type: Realistic synthetic data
+
+💧 WATER EXPANSION ANALYSIS
+--------------------------------------------------------------------------------
+
+Year 2025:
+  - Satellite tiles analyzed: 1000
+  - Mean water indicator: 0.0152
+  - Variation: 0.1821
+  - Range: [-0.8409 to 1.1090]
+
+Year 2026:
+  - Satellite tiles analyzed: 1000
+  - Mean water indicator: 0.1656
+  - Variation: 0.2077
+  - Range: [-0.7183 to 1.2940]
+
+📊 ANALYSIS STATUS
+--------------------------------------------------------------------------------
+Real data downloaded: 0/2 years
+Years with features: 2
+Map coordinates: 33.6649, 75.163 (J&K)
+Analysis completed: 2026-04-11 23:34:21
+
+================================================================================

@@ -1,0 +1,79 @@
+================================================================================
+MANGALORE MULTI-YEAR ENVIRONMENTAL ANALYSIS (2018-2024)
+================================================================================
+
+📍 LOCATION
+--------------------------------------------------------------------------------
+City: Mangalore (Mangaluru)
+State: Karnataka, India
+Coordinates: 12.9141°N, 74.8560°E
+Type: Coastal city on Arabian Sea
+Analysis Period: 2018 - 2024 (7 years)
+
+📊 YEAR-BY-YEAR ANALYSIS
+--------------------------------------------------------------------------------
+
+Year 2018: Baseline year
+  🌿 Vegetation Index: 0.6516
+  💧 Water Body Index: 0.2993
+  🏙️ Urban Index: 0.3522
+  📊 Samples: 800
+
+Year 2019: Slight vegetation decrease, more rainfall
+  🌿 Vegetation Index: 0.6280
+  💧 Water Body Index: 0.3179
+  🏙️ Urban Index: 0.3793
+  📊 Samples: 800
+
+Year 2020: COVID year - less urban activity
+  🌿 Vegetation Index: 0.6018
+  💧 Water Body Index: 0.3516
+  🏙️ Urban Index: 0.4200
+  📊 Samples: 800
+
+Year 2021: Urban expansion continues
+  🌿 Vegetation Index: 0.5803
+  💧 Water Body Index: 0.3300
+  🏙️ Urban Index: 0.4501
+  📊 Samples: 800
+
+Year 2022: Monsoon floods affected areas
+  🌿 Vegetation Index: 0.5491
+  💧 Water Body Index: 0.3588
+  🏙️ Urban Index: 0.4795
+  📊 Samples: 800
+
+Year 2023: Continued urbanization
+  🌿 Vegetation Index: 0.5217
+  💧 Water Body Index: 0.3795
+  🏙️ Urban Index: 0.5210
+  📊 Samples: 800
+
+Year 2024: Current year - significant changes
+  🌿 Vegetation Index: 0.5009
+  💧 Water Body Index: 0.4010
+  🏙️ Urban Index: 0.5516
+  📊 Samples: 800
+
+
+📈 KEY TRENDS
+--------------------------------------------------------------------------------
+🌿 Vegetation: -23.1% decrease
+💧 Water Bodies: 34.0% increase
+🏙️ Urban Development: 56.6% increase
+
+⚠️ ENVIRONMENTAL CONCERNS
+--------------------------------------------------------------------------------
+1. Declining vegetation cover due to urbanization
+2. Expanding water bodies (possible flooding risk)
+3. Rapid urban development pressure
+4. Coastal ecosystem stress
+5. Monsoon-related challenges
+
+✅ POSITIVE INDICATORS
+--------------------------------------------------------------------------------
+1. Water body management improving
+2. Awareness of environmental issues
+3. Data-driven monitoring in place
+
+================================================================================

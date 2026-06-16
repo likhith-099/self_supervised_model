@@ -25,7 +25,7 @@ class FeatureExtractor:
         self,
         checkpoint_path: str,
         device: str = 'cuda',
-        img_size: int = 256
+        img_size: int = 128
     ):
         """
         Initialize feature extractor
@@ -48,11 +48,11 @@ class FeatureExtractor:
         img_array = np.array(img).astype(np.float32) / 255.0
         
         # Normalize using ImageNet stats (common practice)
-        mean = np.array([0.485, 0.456, 0.406])
-        std = np.array([0.229, 0.224, 0.225])
+        mean = np.array([0.485, 0.456, 0.406], dtype=np.float32)
+        std = np.array([0.229, 0.224, 0.225], dtype=np.float32)
         img_array = (img_array - mean) / std
         
-        img_tensor = torch.from_numpy(img_array).permute(2, 0, 1).unsqueeze(0)
+        img_tensor = torch.from_numpy(img_array).permute(2, 0, 1).unsqueeze(0).float()
         return img_tensor.to(self.device)
     
     def extract_features(self, image_path: str) -> np.ndarray:

@@ -10,7 +10,7 @@ from typing import Optional, Union
 import numpy as np
 from PIL import Image
 
-from mae_model import MAEEncoder, MaskedAutoencoder
+from models.mae_model import MAEEncoder, MaskedAutoencoder
 
 
 class EncoderLoader:
@@ -48,7 +48,7 @@ class EncoderLoader:
         if self.model_type == 'encoder_only':
             # Load encoder directly
             self.encoder = MAEEncoder(
-                img_size=256,
+                img_size=128,
                 patch_size=16,
                 embed_dim=768,
                 depth=12
@@ -66,7 +66,7 @@ class EncoderLoader:
         else:
             # Load full MAE model
             self.full_model = MaskedAutoencoder(
-                img_size=256,
+                img_size=128,
                 patch_size=16,
                 embed_dim=768,
                 depth=12
@@ -74,6 +74,13 @@ class EncoderLoader:
             self.full_model.load_state_dict(checkpoint['model_state_dict'])
         
         self.encoder.eval() if self.encoder else self.full_model.eval()
+        
+        # Move model to device
+        if self.encoder:
+            self.encoder = self.encoder.to(self.device)
+        else:
+            self.full_model = self.full_model.to(self.device)
+        
         print(f"Loaded model from: {self.checkpoint_path}")
     
     def extract_features(self, image_path: str) -> np.ndarray:
@@ -88,7 +95,7 @@ class EncoderLoader:
         """
         # Load and preprocess image
         img = Image.open(image_path).convert('RGB')
-        img = img.resize((256, 256))
+        img = img.resize((128, 128))  # Changed from 256 to 128 to match training
         img_array = np.array(img).astype(np.float32) / 255.0
         
         # Convert to tensor

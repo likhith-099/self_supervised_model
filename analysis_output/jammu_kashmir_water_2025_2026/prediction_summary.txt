@@ -1,0 +1,35 @@
+================================================================================
+FUTURE PREDICTION SUMMARY
+================================================================================
+
+Location: Jammu & Kashmir, India
+Condition: WATER
+Historical Period: 2025 - 2026
+Prediction Period: 2027 - 2036
+
+TREND ANALYSIS
+--------------------------------------------------------------------------------
+Overall Direction: INCREASING
+Predicted Change: 10506.55%
+Confidence Level: 95%
+
+HISTORICAL DATA
+--------------------------------------------------------------------------------
+Year 2025: Mean=0.0159, Magnitude=0.1440
+Year 2026: Mean=0.1673, Magnitude=0.2144
+
+PREDICTED VALUES
+--------------------------------------------------------------------------------
+Year 2027: Predicted Mean=0.3187
+Year 2028: Predicted Mean=0.4703
+Year 2029: Predicted Mean=0.6219
+Year 2030: Predicted Mean=0.7735
+Year 2031: Predicted Mean=0.9253
+Year 2032: Predicted Mean=1.0771
+Year 2033: Predicted Mean=1.2290
+Year 2034: Predicted Mean=1.3810
+Year 2035: Predicted Mean=1.5331
+Year 2036: Predicted Mean=1.6852
+
+INTERPRETATION
+--------------------------------------------------------------------------------
